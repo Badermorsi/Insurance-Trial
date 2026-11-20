@@ -214,6 +214,116 @@
               font-weight:650;
           }
 
+          #otpGate[hidden]{
+              display:none !important;
+          }
+
+          .otp-card{
+              text-align:center;
+          }
+
+          .otp-card h1,
+          .otp-card p{
+              text-align:center;
+          }
+
+          .otp-digit-row{
+              display:grid;
+              grid-template-columns:repeat(6,minmax(0,1fr));
+              gap:8px;
+              margin:22px 0 8px;
+          }
+
+          .otp-digit{
+              width:100%;
+              min-width:0;
+              height:52px !important;
+              padding:0 !important;
+              border:1px solid #cbd9de;
+              border-radius:9px;
+              background:#ffffff;
+              color:#20313b;
+              font-size:21px !important;
+              font-weight:750;
+              text-align:center;
+          }
+
+          .otp-digit:focus{
+              border-color:#24899a;
+              box-shadow:0 0 0 3px rgba(36,137,154,.12);
+              outline:none;
+          }
+
+          .otp-back-button{
+              width:100%;
+              height:38px;
+              margin-top:8px;
+              border:1px solid #d8e2e6;
+              border-radius:9px;
+              background:#ffffff;
+              color:#48616b;
+              font-size:12px;
+              font-weight:650;
+              cursor:pointer;
+          }
+
+          .otp-back-button:hover{
+              background:#f4f8f9;
+          }
+
+          .email-choice-list{
+              display:grid;
+              gap:10px;
+              margin:20px 0 10px;
+          }
+
+          .email-choice-option{
+              display:flex !important;
+              align-items:center;
+              gap:10px;
+              margin:0 !important;
+              padding:13px 14px;
+              border:1px solid #d8e2e6;
+              border-radius:9px;
+              background:#ffffff;
+              color:#344b55;
+              font-size:13px !important;
+              font-weight:650 !important;
+              cursor:pointer;
+          }
+
+          .email-choice-option:has(input:checked){
+              border-color:#24899a;
+              background:#f0f8f9;
+              box-shadow:0 0 0 2px rgba(36,137,154,.08);
+          }
+
+          .email-choice-option input{
+              width:17px;
+              height:17px;
+              margin:0;
+              accent-color:#12697a;
+          }
+
+          .otp-resend-button{
+              width:100%;
+              min-height:38px;
+              margin-top:8px;
+              border:1px solid #d8e2e6;
+              border-radius:9px;
+              background:#ffffff;
+              color:#12697a;
+              font-size:12px;
+              font-weight:700;
+              cursor:pointer;
+          }
+
+          .otp-resend-button:disabled{
+              color:#87979d;
+              background:#f5f7f8;
+              cursor:not-allowed;
+          }
+
 
           /* =========================================================
              TOP BRAND
@@ -3245,14 +3355,53 @@
                           title="Show password"
                       >
                           <svg viewBox="0 0 24 24" aria-hidden="true">
-                              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
+                              <path d="M2 12s3.6-7 10-7 10 7 10 7S18.4 19 12 19 2 12 2 12Z"></path>
                               <circle cx="12" cy="12" r="3"></circle>
                           </svg>
                       </button>
                   </div>
                   <button id="pagePasswordLogin" class="page-password-submit" type="button">Login</button>
-                  <div id="pagePasswordError" class="page-password-error" role="alert" hidden>That username or password is not correct. Please try again.</div>
+                  <div id="pagePasswordError" class="page-password-error" role="alert" hidden></div>
               </form>
+          </main>
+
+          <main id="emailChoiceGate" class="page-password-gate" hidden>
+              <section class="page-password-card" aria-labelledby="emailChoiceHeading">
+                  <h1 id="emailChoiceHeading">Send OTP to:</h1>
+                  <p>Choose where you want to receive your one-time code.</p>
+                  <div class="email-choice-list" role="radiogroup" aria-label="OTP email address">
+                      <label class="email-choice-option">
+                          <input type="radio" name="otpRecipient" value="badermorsi@outlook.com">
+                          <span>badermorsi@outlook.com</span>
+                      </label>
+                      <label class="email-choice-option">
+                          <input type="radio" name="otpRecipient" value="sama@alain-pharmacy.com">
+                          <span>sama@alain-pharmacy.com</span>
+                      </label>
+                  </div>
+                  <button id="sendOtpButton" class="page-password-submit" type="button">Send OTP</button>
+                  <div id="emailChoiceError" class="page-password-error" role="alert" hidden></div>
+                  <button id="emailBackButton" class="otp-back-button" type="button">Back to password</button>
+              </section>
+          </main>
+
+          <main id="otpGate" class="page-password-gate" hidden>
+              <section class="page-password-card otp-card" aria-labelledby="otpHeading">
+                  <h1 id="otpHeading">Enter OTP</h1>
+                  <p id="otpMessage">Enter the 6-digit code sent to your email.</p>
+                  <div id="otpDigitRow" class="otp-digit-row" role="group" aria-label="6-digit one-time password">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 2">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 3">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 4">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 5">
+                      <input class="otp-digit" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 6">
+                  </div>
+                  <button id="otpLoginButton" class="page-password-submit" type="button">Login</button>
+                  <button id="otpResendButton" class="otp-resend-button" type="button" disabled>Resend OTP in 5:00</button>
+                  <div id="otpError" class="page-password-error" role="alert" hidden></div>
+                  <button id="otpBackButton" class="otp-back-button" type="button">Back to login</button>
+              </section>
           </main>
 
           <div id="mainApp" class="app" hidden>
@@ -13142,56 +13291,579 @@ if(terms.length === 0){
               }
           });
 
-          document
-              .getElementById("logoutButton")
-              .addEventListener("click",() => {
-                  closeProfileMenu();
-                  closeTabSearch();
-                  closeFilter();
-                  document.getElementById("mainApp").hidden = true;
-                  document.getElementById("pagePasswordGate").hidden = false;
-                  pagePasswordInput.value = "";
-                  pagePasswordError.hidden = true;
-                  pagePasswordInput.focus();
+          const authWorkerUrl =
+              "https://insurance-all-list-auth.badermorsi.workers.dev";
+          const sessionTokenKey = "insuranceAllListSessionToken";
+          const sessionExpiryKey = "insuranceAllListSessionExpiry";
+          const otpInputs = Array.from(document.querySelectorAll(".otp-digit"));
+          const otpGate = document.getElementById("otpGate");
+          const otpError = document.getElementById("otpError");
+          const otpMessage = document.getElementById("otpMessage");
+          const otpLoginButton = document.getElementById("otpLoginButton");
+          let otpChallenge = "";
+          let sessionExpiryTimer = null;
+          let dashboardInitialized = false;
+
+          function clearAuthSession(){
+              sessionStorage.removeItem(sessionTokenKey);
+              sessionStorage.removeItem(sessionExpiryKey);
+              if(sessionExpiryTimer !== null){
+                  clearTimeout(sessionExpiryTimer);
+                  sessionExpiryTimer = null;
+              }
+          }
+
+          function clearOtpBoxes(){
+              otpInputs.forEach(input => input.value = "");
+              otpChallenge = "";
+              otpError.hidden = true;
+          }
+
+          function showPasswordGate(message = ""){
+              clearAuthSession();
+              clearOtpBoxes();
+              otpGate.hidden = true;
+              document.getElementById("mainApp").hidden = true;
+              document.getElementById("pagePasswordGate").hidden = false;
+              pagePasswordInput.value = "";
+              pagePasswordError.textContent = message;
+              pagePasswordError.hidden = !message;
+              pagePasswordInput.focus();
+          }
+
+          function showDashboard(){
+              document.getElementById("pagePasswordGate").hidden = true;
+              otpGate.hidden = true;
+              document.getElementById("mainApp").hidden = false;
+              if(!dashboardInitialized){
+                  dashboardInitialized = true;
+                  createTabs();
+                  openTab("apg");
+              }
+          }
+
+          function endExpiredSession(){
+              showPasswordGate("Your 8-hour session has ended. Please sign in again.");
+          }
+
+          function scheduleSessionExpiry(expiresAt){
+              if(sessionExpiryTimer !== null){
+                  clearTimeout(sessionExpiryTimer);
+              }
+              const remaining = Math.max(0, expiresAt - Date.now());
+              sessionExpiryTimer = setTimeout(endExpiredSession, remaining);
+          }
+
+          function fillOtpBoxes(value){
+              const digits = String(value || "").replace(/\D/g, "").slice(0, 6);
+              otpInputs.forEach((input, index) => {
+                  input.value = digits[index] || "";
+              });
+              otpError.hidden = true;
+              if(digits.length === 6){
+                  otpLoginButton.focus();
+              }else{
+                  otpInputs[digits.length]?.focus();
+              }
+          }
+
+          otpInputs.forEach((input, index) => {
+              input.addEventListener("input", () => {
+                  const digits = input.value.replace(/\D/g, "");
+                  if(digits.length > 1){
+                      fillOtpBoxes(digits);
+                      return;
+                  }
+                  input.value = digits.slice(-1);
+                  if(input.value){
+                      otpError.hidden = true;
+                      if(index < otpInputs.length - 1){
+                          otpInputs[index + 1].focus();
+                      }else{
+                          otpLoginButton.focus();
+                      }
+                  }
               });
 
-          function handlePagePasswordLogin(){
-              if(
-                  pagePasswordUsername.value !== "Zone O" ||
-                  pagePasswordInput.value.trim() !== "Alain2027@ZAS"
-              ){
+              input.addEventListener("paste", event => {
+                  const pasted = event.clipboardData?.getData("text") || "";
+                  if(pasted){
+                      event.preventDefault();
+                      fillOtpBoxes(pasted);
+                  }
+              });
+
+              input.addEventListener("keydown", event => {
+                  if(event.key === "Backspace" && !input.value && index > 0){
+                      otpInputs[index - 1].focus();
+                  }else if(event.key === "ArrowLeft" && index > 0){
+                      event.preventDefault();
+                      otpInputs[index - 1].focus();
+                  }else if(event.key === "ArrowRight" && index < otpInputs.length - 1){
+                      event.preventDefault();
+                      otpInputs[index + 1].focus();
+                  }else if(event.key === "Enter"){
+                      event.preventDefault();
+                      otpLoginButton.click();
+                  }
+              });
+          });
+
+          async function handlePagePasswordLogin(){
+              const loginButton = document.getElementById("pagePasswordLogin");
+              loginButton.disabled = true;
+              pagePasswordError.hidden = true;
+
+              try{
+                  const response = await fetch(authWorkerUrl + "/auth/request-otp", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ password: pagePasswordInput.value })
+                  });
+                  const result = await response.json().catch(() => ({}));
+
+                  if(!response.ok || !result.success || !result.challenge){
+                      throw new Error(result.error || "Could not send the OTP.");
+                  }
+
+                  pagePasswordInput.value = "";
+                  document.getElementById("pagePasswordGate").hidden = true;
+                  otpGate.hidden = false;
+                  otpMessage.textContent = "A 6-digit code was sent to your email.";
+                  clearOtpBoxes();
+                  otpChallenge = result.challenge;
+                  otpInputs[0].focus();
+              }catch(error){
+                  pagePasswordError.textContent =
+                      error.message || "Login failed. Please try again.";
                   pagePasswordError.hidden = false;
-                  pagePasswordInput.focus();
-                  pagePasswordInput.select();
+              }finally{
+                  loginButton.disabled = false;
+              }
+          }
+
+          async function verifyPageOtp(){
+              const otp = otpInputs.map(input => input.value).join("");
+              if(otp.length !== 6 || !/^\d{6}$/.test(otp)){
+                  otpError.textContent = "Enter all 6 digits of the OTP.";
+                  otpError.hidden = false;
+                  otpInputs.find(input => !input.value)?.focus();
                   return;
               }
 
-              pagePasswordError.hidden = true;
-              document.getElementById("pagePasswordGate").hidden = true;
-              document.getElementById("mainApp").hidden = false;
-              createTabs();
-              openTab("apg");
+              otpLoginButton.disabled = true;
+              otpError.hidden = true;
+
+              try{
+                  const response = await fetch(authWorkerUrl + "/auth/verify-otp", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ challenge: otpChallenge, otp: otp })
+                  });
+                  const result = await response.json().catch(() => ({}));
+
+                  if(!response.ok || !result.success || !result.sessionToken){
+                      throw new Error(result.error || "OTP verification failed.");
+                  }
+
+                  const sessionSeconds = Math.min(
+                      Number(result.expiresIn) || 28800,
+                      28800
+                  );
+                  const expiresAt = Date.now() + sessionSeconds * 1000;
+
+                  sessionStorage.setItem(sessionTokenKey, result.sessionToken);
+                  sessionStorage.setItem(sessionExpiryKey, String(expiresAt));
+                  scheduleSessionExpiry(expiresAt);
+                  showDashboard();
+              }catch(error){
+                  otpError.textContent =
+                      error.message || "OTP verification failed. Please try again.";
+                  otpError.hidden = false;
+              }finally{
+                  otpLoginButton.disabled = false;
+              }
           }
 
-          pagePasswordInput.addEventListener("input",() => {
+          const authWorkerUrl =
+              "https://insurance-all-list-auth.badermorsi.workers.dev";
+          const sessionTokenKey = "insuranceAllListSessionToken";
+          const sessionExpiryKey = "insuranceAllListSessionExpiry";
+          const otpInputs = Array.from(document.querySelectorAll(".otp-digit"));
+          const otpGate = document.getElementById("otpGate");
+          const emailChoiceGate = document.getElementById("emailChoiceGate");
+          const otpError = document.getElementById("otpError");
+          const otpMessage = document.getElementById("otpMessage");
+          const otpLoginButton = document.getElementById("otpLoginButton");
+          const otpResendButton = document.getElementById("otpResendButton");
+          const sendOtpButton = document.getElementById("sendOtpButton");
+          const emailChoiceError = document.getElementById("emailChoiceError");
+          let pendingPassword = "";
+          let pendingRecipient = "";
+          let otpChallenge = "";
+          let resendCountdownTimer = null;
+          let sessionExpiryTimer = null;
+          let dashboardInitialized = false;
+
+          function clearAuthSession(){
+              sessionStorage.removeItem(sessionTokenKey);
+              sessionStorage.removeItem(sessionExpiryKey);
+              if(sessionExpiryTimer !== null){
+                  clearTimeout(sessionExpiryTimer);
+                  sessionExpiryTimer = null;
+              }
+          }
+
+          function clearResendCountdown(){
+              if(resendCountdownTimer !== null){
+                  clearInterval(resendCountdownTimer);
+                  resendCountdownTimer = null;
+              }
+              otpResendButton.disabled = true;
+              otpResendButton.textContent = "Resend OTP in 5:00";
+          }
+
+          function clearOtpBoxes(){
+              otpInputs.forEach(input => input.value = "");
+              otpChallenge = "";
+              otpError.hidden = true;
+          }
+
+          function showPasswordGate(message = ""){
+              clearAuthSession();
+              clearResendCountdown();
+              clearOtpBoxes();
+              pendingPassword = "";
+              pendingRecipient = "";
+              emailChoiceGate.hidden = true;
+              otpGate.hidden = true;
+              document.getElementById("mainApp").hidden = true;
+              document.getElementById("pagePasswordGate").hidden = false;
+              pagePasswordInput.value = "";
+              pagePasswordError.textContent = message;
+              pagePasswordError.hidden = !message;
+              emailChoiceError.hidden = true;
+              pagePasswordInput.focus();
+          }
+
+          function showDashboard(){
+              document.getElementById("pagePasswordGate").hidden = true;
+              emailChoiceGate.hidden = true;
+              otpGate.hidden = true;
+              document.getElementById("mainApp").hidden = false;
+              if(!dashboardInitialized){
+                  dashboardInitialized = true;
+                  createTabs();
+                  openTab("apg");
+              }
+          }
+
+          function endExpiredSession(){
+              showPasswordGate("Your 8-hour session has ended. Please sign in again.");
+          }
+
+          function scheduleSessionExpiry(expiresAt){
+              if(sessionExpiryTimer !== null){
+                  clearTimeout(sessionExpiryTimer);
+              }
+              const remaining = Math.max(0, expiresAt - Date.now());
+              sessionExpiryTimer = setTimeout(endExpiredSession, remaining);
+          }
+
+          function fillOtpBoxes(value){
+              const digits = String(value || "").replace(/\D/g, "").slice(0, 6);
+              otpInputs.forEach((input, index) => {
+                  input.value = digits[index] || "";
+              });
+              otpError.hidden = true;
+              if(digits.length === 6){
+                  otpLoginButton.focus();
+              }else{
+                  otpInputs[digits.length]?.focus();
+              }
+          }
+
+          otpInputs.forEach((input, index) => {
+              input.addEventListener("input", () => {
+                  const digits = input.value.replace(/\D/g, "");
+                  if(digits.length > 1){
+                      fillOtpBoxes(digits);
+                      return;
+                  }
+                  input.value = digits.slice(-1);
+                  if(input.value){
+                      otpError.hidden = true;
+                      if(index < otpInputs.length - 1){
+                          otpInputs[index + 1].focus();
+                      }else{
+                          otpLoginButton.focus();
+                      }
+                  }
+              });
+
+              input.addEventListener("paste", event => {
+                  const pasted = event.clipboardData?.getData("text") || "";
+                  if(pasted){
+                      event.preventDefault();
+                      fillOtpBoxes(pasted);
+                  }
+              });
+
+              input.addEventListener("keydown", event => {
+                  if(event.key === "Backspace" && !input.value && index > 0){
+                      otpInputs[index - 1].focus();
+                  }else if(event.key === "ArrowLeft" && index > 0){
+                      event.preventDefault();
+                      otpInputs[index - 1].focus();
+                  }else if(event.key === "ArrowRight" && index < otpInputs.length - 1){
+                      event.preventDefault();
+                      otpInputs[index + 1].focus();
+                  }else if(event.key === "Enter"){
+                      event.preventDefault();
+                      otpLoginButton.click();
+                  }
+              });
+          });
+
+          function startResendCountdown(){
+              clearResendCountdown();
+              let remaining = 300;
+              const updateButton = () => {
+                  const minutes = Math.floor(remaining / 60);
+                  const seconds = remaining % 60;
+                  otpResendButton.textContent =
+                      "Resend OTP in " + String(minutes).padStart(2, "0") +
+                      ":" + String(seconds).padStart(2, "0");
+                  if(remaining <= 0){
+                      clearInterval(resendCountdownTimer);
+                      resendCountdownTimer = null;
+                      otpResendButton.disabled = false;
+                      otpResendButton.textContent = "Resend OTP";
+                      return;
+                  }
+                  remaining -= 1;
+              };
+              otpResendButton.disabled = true;
+              updateButton();
+              resendCountdownTimer = setInterval(updateButton, 1000);
+          }
+
+          async function handlePagePasswordLogin(){
+              const loginButton = document.getElementById("pagePasswordLogin");
+              loginButton.disabled = true;
+              pagePasswordError.hidden = true;
+
+              try{
+                  if(!pagePasswordInput.value){
+                      throw new Error("Enter your password.");
+                  }
+                  pendingPassword = pagePasswordInput.value;
+                  pagePasswordInput.value = "";
+                  document.getElementById("pagePasswordGate").hidden = true;
+                  emailChoiceGate.hidden = false;
+                  emailChoiceError.hidden = true;
+                  document.querySelectorAll('input[name="otpRecipient"]').forEach(input => {
+                      input.checked = false;
+                  });
+              }catch(error){
+                  pagePasswordError.textContent =
+                      error.message || "Enter your password.";
+                  pagePasswordError.hidden = false;
+              }finally{
+                  loginButton.disabled = false;
+              }
+          }
+
+          async function sendOtpToSelectedEmail(isResend = false){
+              const selected = document.querySelector('input[name="otpRecipient"]:checked');
+              const recipient = isResend
+                  ? pendingRecipient
+                  : (selected ? selected.value : "");
+
+              if(!recipient){
+                  emailChoiceError.textContent = "Choose an email address first.";
+                  emailChoiceError.hidden = false;
+                  return;
+              }
+
+              sendOtpButton.disabled = true;
+              emailChoiceError.hidden = true;
+              if(isResend){
+                  otpResendButton.disabled = true;
+                  otpResendButton.textContent = "Sending new code...";
+              }else{
+                  sendOtpButton.textContent = "Sending OTP...";
+              }
+
+              try{
+                  const response = await fetch(authWorkerUrl + "/auth/request-otp", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                          password: pendingPassword,
+                          recipient: recipient
+                      })
+                  });
+                  const result = await response.json().catch(() => ({}));
+
+                  if(!response.ok || !result.success || !result.challenge){
+                      throw new Error(result.error || "Could not send the OTP.");
+                  }
+
+                  pendingRecipient = recipient;
+                  otpChallenge = result.challenge;
+                  clearOtpBoxes();
+                  otpChallenge = result.challenge;
+                  emailChoiceGate.hidden = true;
+                  otpGate.hidden = false;
+                  otpMessage.textContent = "A 6-digit code was sent to " + recipient + ".";
+                  startResendCountdown();
+                  otpInputs[0].focus();
+              }catch(error){
+                  const message = error.message || "Could not send the OTP.";
+                  if(isResend){
+                      otpError.textContent = message;
+                      otpError.hidden = false;
+                      otpResendButton.disabled = false;
+                      otpResendButton.textContent = "Resend OTP";
+                  }else{
+                      emailChoiceError.textContent = message;
+                      emailChoiceError.hidden = false;
+                  }
+              }finally{
+                  sendOtpButton.disabled = false;
+                  sendOtpButton.textContent = "Send OTP";
+              }
+          }
+
+          async function verifyPageOtp(){
+              const otp = otpInputs.map(input => input.value).join("");
+              if(otp.length !== 6 || !/^\d{6}$/.test(otp)){
+                  otpError.textContent = "Enter all 6 digits of the OTP.";
+                  otpError.hidden = false;
+                  otpInputs.find(input => !input.value)?.focus();
+                  return;
+              }
+
+              otpLoginButton.disabled = true;
+              otpError.hidden = true;
+
+              try{
+                  const response = await fetch(authWorkerUrl + "/auth/verify-otp", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ challenge: otpChallenge, otp: otp })
+                  });
+                  const result = await response.json().catch(() => ({}));
+
+                  if(!response.ok || !result.success || !result.sessionToken){
+                      throw new Error(result.error || "OTP verification failed.");
+                  }
+
+                  const sessionSeconds = Math.min(
+                      Number(result.expiresIn) || 28800,
+                      28800
+                  );
+                  const expiresAt = Date.now() + sessionSeconds * 1000;
+                  sessionStorage.setItem(sessionTokenKey, result.sessionToken);
+                  sessionStorage.setItem(sessionExpiryKey, String(expiresAt));
+                  pendingPassword = "";
+                  scheduleSessionExpiry(expiresAt);
+                  showDashboard();
+              }catch(error){
+                  otpError.textContent =
+                      error.message || "OTP verification failed. Please try again.";
+                  otpError.hidden = false;
+              }finally{
+                  otpLoginButton.disabled = false;
+              }
+          }
+
+          document
+              .getElementById("logoutButton")
+              .addEventListener("click", () => {
+                  closeProfileMenu();
+                  closeTabSearch();
+                  closeFilter();
+                  showPasswordGate();
+              });
+
+          pagePasswordInput.addEventListener("input", () => {
               pagePasswordError.hidden = true;
           });
 
           document
               .getElementById("pagePasswordLogin")
-              .addEventListener("click",handlePagePasswordLogin);
+              .addEventListener("click", handlePagePasswordLogin);
 
-          pagePasswordForm.addEventListener("submit",event => {
+          pagePasswordForm.addEventListener("submit", event => {
               event.preventDefault();
               handlePagePasswordLogin();
           });
 
-          pagePasswordInput.addEventListener("keydown",event => {
+          pagePasswordInput.addEventListener("keydown", event => {
               if(event.key === "Enter"){
                   event.preventDefault();
                   handlePagePasswordLogin();
               }
           });
+
+          sendOtpButton.addEventListener("click", () => sendOtpToSelectedEmail(false));
+          otpLoginButton.addEventListener("click", verifyPageOtp);
+
+          otpResendButton.addEventListener("click", () => {
+              if(!otpResendButton.disabled){
+                  sendOtpToSelectedEmail(true);
+              }
+          });
+
+          document
+              .getElementById("emailBackButton")
+              .addEventListener("click", () => showPasswordGate());
+
+          document
+              .getElementById("otpBackButton")
+              .addEventListener("click", () => showPasswordGate());
+
+          async function restoreAuthSession(){
+              const token = sessionStorage.getItem(sessionTokenKey);
+              const expiresAt = Number(sessionStorage.getItem(sessionExpiryKey));
+
+              if(!token || !expiresAt || Date.now() >= expiresAt){
+                  clearAuthSession();
+                  return;
+              }
+
+              try{
+                  const response = await fetch(authWorkerUrl + "/auth/check", {
+                      method: "GET",
+                      headers: { "Authorization": "Bearer " + token }
+                  });
+                  const result = await response.json().catch(() => ({}));
+
+                  if(response.ok && result.authenticated){
+                      scheduleSessionExpiry(expiresAt);
+                      showDashboard();
+                  }else{
+                      showPasswordGate("Your session ended. Please sign in again.");
+                  }
+              }catch{
+                  pagePasswordError.textContent =
+                      "Could not check your saved session. Please try signing in again.";
+                  pagePasswordError.hidden = false;
+              }
+          }
+
+          document.addEventListener("visibilitychange", () => {
+              if(document.visibilityState === "visible"){
+                  const expiresAt = Number(sessionStorage.getItem(sessionExpiryKey));
+                  if(expiresAt && Date.now() >= expiresAt){
+                      endExpiredSession();
+                  }
+              }
+          });
+
+          restoreAuthSession();
 
           </script>
 
