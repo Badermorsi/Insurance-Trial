@@ -1,0 +1,38 @@
+[
+  {
+    "Item ID": "16-01-06665",
+    "Item Name": "ITRO-FER PLUS CAPS 30 S",
+    "Generic": "Iron (Lipofer (Iron Microencapsulated),Vitamin C (L-Ascorbic Acid),Vitamin B2 (Riboflavin),Folic Acid (Quatrefolic),Vitamin B6 (Pyridoxine HCL),Copper (Copper Sulphate anhydrous)",
+    "Strength": "27 mg,55 mg,1.4 mg,355.32 µg,1.9 mg,1 mg",
+    "Is UPP Scope": "Yes",
+    "THIQA": "Yes",
+    "BASIC": "No",
+    "Markup": 47.4,
+    "Daman Coverage": "UPP Thiqa Only",
+    "Search in APG Formulary ": null
+  },
+  {
+    "Item ID": "HAAD Code",
+    "Item Name": "Item Name",
+    "Generic": "Generic",
+    "Strength": "Strength",
+    "Is UPP Scope": "Is UPP Scope",
+    "THIQA": "THIQA",
+    "BASIC": "BASIC",
+    "Markup": "Markup",
+    "Daman Coverage": "Search in HAAD List",
+    "Search in APG Formulary ": null
+  },
+  {
+    "Item ID": "A01-0013-00468-01",
+    "Item Name": "21ST CENTURY C-500MG ORANGE",
+    "Generic": "Ascorbic Acid (Vitamin C) & Sodium Ascorbate",
+    "Strength": "500 mg",
+    "Is UPP Scope": "Yes",
+    "THIQA": "Yes",
+    "BASIC": "No",
+    "Markup": 9.9,
+    "Daman Coverage": null,
+    "Search in APG Formulary ": null
+  }
+]

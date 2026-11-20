@@ -1,0 +1,51 @@
+[
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": "Determining the refill date ",
+    "Unnamed: 2": null,
+    "Unnamed: 3": null,
+    "Unnamed: 4": null
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": "Enter the Dispense date in the green field",
+    "Unnamed: 2": null,
+    "Unnamed: 3": null,
+    "Unnamed: 4": null
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": "Enter the duration in the blue field",
+    "Unnamed: 2": null,
+    "Unnamed: 3": null,
+    "Unnamed: 4": null
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": "The next refill date will be calculated automatically",
+    "Unnamed: 2": null,
+    "Unnamed: 3": null,
+    "Unnamed: 4": null
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": "Dispense date",
+    "Unnamed: 2": "Duration",
+    "Unnamed: 3": "Next refill",
+    "Unnamed: 4": null
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": null,
+    "Unnamed: 2": null,
+    "Unnamed: 3": "FROM",
+    "Unnamed: 4": "TO"
+  },
+  {
+    "Unnamed: 0": null,
+    "Unnamed: 1": 45846,
+    "Unnamed: 2": 90,
+    "Unnamed: 3": 45925,
+    "Unnamed: 4": 45965
+  }
+]
