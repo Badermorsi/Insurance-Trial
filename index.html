@@ -3336,6 +3336,82 @@
 
           }
 
+          .assistant-shell{
+              width:min(100%,1000px);
+              height:100%;
+              min-height:0;
+              margin:0 auto;
+              padding:20px;
+              display:flex;
+              flex-direction:column;
+              gap:14px;
+              background:#ffffff;
+          }
+          .assistant-heading h2{margin:0;color:#203741;font-size:20px;}
+          .assistant-heading p{margin:5px 0 0;color:#6d7e86;font-size:13px;}
+          .assistant-messages{
+              flex:1 1 auto;
+              min-height:180px;
+              overflow-y:auto;
+              display:flex;
+              flex-direction:column;
+              gap:12px;
+              padding:16px;
+              border:1px solid #e0e8eb;
+              border-radius:12px;
+              background:#f7fafb;
+          }
+          .assistant-welcome{margin:auto;color:#687982;font-size:14px;text-align:center;}
+          .assistant-message{max-width:min(85%,760px);}
+          .assistant-message-user{align-self:flex-end;}
+          .assistant-message-assistant{align-self:flex-start;}
+          .assistant-message-label{margin:0 0 4px;color:#687982;font-size:11px;font-weight:700;}
+          .assistant-message-bubble{
+              padding:11px 13px;
+              border:1px solid #dfe7ea;
+              border-radius:12px;
+              background:#ffffff;
+              color:#263a43;
+              font-size:14px;
+              line-height:1.55;
+              white-space:pre-wrap;
+              overflow-wrap:anywhere;
+          }
+          .assistant-message-user .assistant-message-bubble{background:#eaf5f6;border-color:#d3e8eb;}
+          .assistant-sources{margin-top:7px;display:flex;flex-direction:column;gap:4px;font-size:12px;}
+          .assistant-sources a{color:#12697a;text-decoration:underline;overflow-wrap:anywhere;}
+          .assistant-form{display:flex;align-items:flex-end;gap:9px;}
+          .assistant-input{
+              flex:1 1 auto;
+              min-height:48px;
+              max-height:130px;
+              resize:vertical;
+              padding:12px;
+              border:1px solid #cbd9de;
+              border-radius:10px;
+              font:inherit;
+              font-size:14px;
+          }
+          .assistant-send{
+              min-width:110px;
+              height:44px;
+              padding:0 16px;
+              border:0;
+              border-radius:9px;
+              background:#12697a;
+              color:#fff;
+              font:inherit;
+              font-weight:700;
+              cursor:pointer;
+          }
+          .assistant-send:disabled{opacity:.6;cursor:wait;}
+          .assistant-disclaimer{margin:0;color:#77868d;font-size:11px;line-height:1.45;}
+          @media(max-width:600px){
+              .assistant-shell{padding:12px;gap:10px;}
+              .assistant-form{align-items:stretch;flex-direction:column;}
+              .assistant-send{width:100%;}
+              .assistant-message{max-width:96%;}
+          }
           </style>
 
           </head>
@@ -3879,7 +3955,13 @@
 
               remainingTabs.find(tab => tab.id === "refill"),
 
-              remainingTabs.find(tab => tab.id === "eligibility")
+              remainingTabs.find(tab => tab.id === "eligibility"),
+
+              {
+                  id:"assistant",
+                  name:"AI Assistant",
+                  files:[]
+              }
 
           ].filter(Boolean);
 
@@ -11808,6 +11890,122 @@
           }
 
 
+          let assistantHistory = [];
+          let assistantBusy = false;
+
+          function renderAssistantMessages(){
+              const list = document.getElementById("assistantMessages");
+              if(!list){ return; }
+              list.innerHTML = "";
+              if(assistantHistory.length === 0){
+                  const welcome = document.createElement("div");
+                  welcome.className = "assistant-welcome";
+                  welcome.textContent = "Hello! Ask a question and I’ll search for a helpful answer.";
+                  list.appendChild(welcome);
+                  return;
+              }
+              assistantHistory.forEach(message => {
+                  const item = document.createElement("article");
+                  item.className = "assistant-message assistant-message-" + message.role;
+                  const label = document.createElement("div");
+                  label.className = "assistant-message-label";
+                  label.textContent = message.role === "user" ? "You" : "AI Assistant";
+                  const bubble = document.createElement("div");
+                  bubble.className = "assistant-message-bubble";
+                  bubble.textContent = message.content;
+                  item.append(label, bubble);
+                  if(message.role === "assistant" && Array.isArray(message.sources) && message.sources.length){
+                      const sources = document.createElement("div");
+                      sources.className = "assistant-sources";
+                      message.sources.forEach(source => {
+                          const link = document.createElement("a");
+                          link.href = source.url;
+                          link.target = "_blank";
+                          link.rel = "noopener noreferrer";
+                          link.textContent = source.title || source.url;
+                          sources.appendChild(link);
+                      });
+                      item.appendChild(sources);
+                  }
+                  list.appendChild(item);
+              });
+              list.scrollTop = list.scrollHeight;
+          }
+
+          function renderAssistant(){
+              tableArea.innerHTML = `
+                  <section class="assistant-shell" aria-label="AI Assistant">
+                      <header class="assistant-heading">
+                          <h2>AI Assistant</h2>
+                          <p>Ask a question. The assistant can search the web and show sources.</p>
+                      </header>
+                      <div id="assistantMessages" class="assistant-messages" aria-live="polite"></div>
+                      <form id="assistantForm" class="assistant-form">
+                          <textarea id="assistantInput" class="assistant-input" rows="2" maxlength="2000" placeholder="Ask anything..." aria-label="Your question"></textarea>
+                          <button id="assistantSend" class="assistant-send" type="submit">Ask AI</button>
+                      </form>
+                      <p class="assistant-disclaimer">AI can make mistakes. For medication, pregnancy, or breastfeeding questions, verify the answer with a pharmacist or clinician. Do not enter patient names or identifying details.</p>
+                  </section>
+              `;
+              const form = document.getElementById("assistantForm");
+              const input = document.getElementById("assistantInput");
+              const send = document.getElementById("assistantSend");
+              renderAssistantMessages();
+              input.focus();
+
+              form.addEventListener("submit", async event => {
+                  event.preventDefault();
+                  const question = input.value.trim();
+                  if(!question || assistantBusy){ return; }
+
+                  assistantHistory.push({ role:"user", content:question });
+                  input.value = "";
+                  assistantBusy = true;
+                  send.disabled = true;
+                  send.textContent = "Searching...";
+                  renderAssistantMessages();
+
+                  try{
+                      const token = sessionStorage.getItem(sessionTokenKey) || "";
+                      const response = await fetch(authWorkerUrl + "/api/assistant", {
+                          method:"POST",
+                          headers:{
+                              "Content-Type":"application/json",
+                              "Authorization":"Bearer " + token
+                          },
+                          body:JSON.stringify({ messages:assistantHistory })
+                      });
+                      const result = await response.json().catch(() => ({}));
+                      if(!response.ok || !result.success || !result.answer){
+                          throw new Error(result.error || "The assistant could not answer. Please try again.");
+                      }
+                      assistantHistory.push({
+                          role:"assistant",
+                          content:result.answer,
+                          sources:Array.isArray(result.sources) ? result.sources : []
+                      });
+                  }catch(error){
+                      assistantHistory.push({
+                          role:"assistant",
+                          content:error.message || "The assistant could not answer. Please try again.",
+                          sources:[]
+                      });
+                  }finally{
+                      assistantBusy = false;
+                      send.disabled = false;
+                      send.textContent = "Ask AI";
+                      renderAssistantMessages();
+                      input.focus();
+                  }
+              });
+
+              input.addEventListener("keydown", event => {
+                  if(event.key === "Enter" && !event.shiftKey){
+                      event.preventDefault();
+                      form.requestSubmit();
+                  }
+              });
+          }
           /* =========================================================
              OPEN TAB
           ========================================================= */
@@ -11851,6 +12049,12 @@
 
             const version =
                 ++renderVersion;
+
+
+            if(id === "assistant"){
+                renderAssistant();
+                return;
+            }
 
 
             if(id === "dose"){
