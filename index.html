@@ -46,8 +46,10 @@
           ========================================================= */
 
           .app{
+              position:fixed;
+              inset:0;
               width:100%;
-              height:100vh;
+              height:auto;
 
               display:flex;
               flex-direction:column;
@@ -3254,6 +3256,8 @@
               }
 
               .app{
+                  position:relative;
+                  inset:auto;
                   height:auto;
                   min-height:100vh;
               }
